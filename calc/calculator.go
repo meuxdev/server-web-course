@@ -14,7 +14,8 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	operation := scanner.Text()
-	values := strings.Split(operation, "+")
+	sign := "p"
+	values := strings.Split(operation, sign)
 	fmt.Println(values)
 	number1, err1 := strconv.Atoi(values[0])
 	number2, err2 := strconv.Atoi(values[1])
@@ -23,5 +24,16 @@ func main() {
 		log.Fatalln(err1)
 	}
 
-	fmt.Println(number1 + number2)
+	switch sign {
+	case "+":
+		fmt.Println(number1 + number2)
+	case "-":
+		fmt.Println(number1 - number2)
+	case "/":
+		fmt.Println(number1 / number2)
+	case "*":
+		fmt.Println(number1 * number2)
+	default:
+		fmt.Println(sign, "-- Operation invalid")
+	}
 }
