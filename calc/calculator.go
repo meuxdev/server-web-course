@@ -9,31 +9,56 @@ import (
 	"strings"
 )
 
-func main() {
-	// declarando el scanner
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	operation := scanner.Text()
-	sign := "p"
-	values := strings.Split(operation, sign)
-	fmt.Println(values)
-	number1, err1 := strconv.Atoi(values[0])
-	number2, err2 := strconv.Atoi(values[1])
+func CreateScanner() *bufio.Scanner {
+	return bufio.NewScanner(os.Stdin)
+}
 
-	if err1 != nil || err2 != nil {
-		log.Fatalln(err1)
-	}
+type Calc struct {
+}
+
+func (Calc) Operate(input string, sign string) int {
+
+	values := strings.Split(input, sign)
+
+	number1 := ParseInput(values[0])
+	number2 := ParseInput(values[1])
 
 	switch sign {
 	case "+":
-		fmt.Println(number1 + number2)
+		return number1 + number2
 	case "-":
-		fmt.Println(number1 - number2)
+		return number1 - number2
 	case "/":
-		fmt.Println(number1 / number2)
+		return number1 / number2
 	case "*":
-		fmt.Println(number1 * number2)
+		return number1 * number2
 	default:
-		fmt.Println(sign, "-- Operation invalid")
+		return 0
 	}
+}
+
+func ParseInput(input string) int {
+	num, err := strconv.Atoi(input)
+	if err != nil {
+		log.Fatalln("Invalid Parse Input: string to int")
+	}
+	return num
+}
+
+func RequestInput(textMsg string) string {
+	fmt.Println(textMsg)
+	scanner := CreateScanner()
+	scanner.Scan()
+	return scanner.Text()
+}
+
+func main() {
+	input := RequestInput("Operation: ")
+	sign := RequestInput("Sign Operation: ")
+	fmt.Println("Input: ", input)
+	fmt.Println("Sign: ", sign)
+	c := Calc{}
+	result := c.Operate(input, sign)
+	fmt.Println("Result: ", result)
+
 }
