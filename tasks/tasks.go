@@ -8,6 +8,14 @@ type Task struct {
 	completed   bool
 }
 
+func NewTask(name string, description string, completed bool) *Task {
+	return &Task{
+		name:        name,
+		description: description,
+		completed:   completed,
+	}
+}
+
 func (task *Task) String() string {
 	return fmt.Sprintf("Type Task ---\nTask Name: %s\nTask Description: %s\nTask Completed: %t\n", task.name, task.description, task.completed)
 }
@@ -25,11 +33,7 @@ func (t *Task) UpdateName(newName string) {
 }
 
 func main() {
-	t := Task{
-		name:        "Finish this course",
-		description: "Complete the go course in this week",
-		completed:   false,
-	}
+	t := NewTask("Task Name", "Some random description to this task.", false)
 
 	fmt.Printf(t.String())
 	fmt.Println("----")
