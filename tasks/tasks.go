@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type TaskList struct {
 	tasks []*Task
@@ -56,10 +60,12 @@ type Task struct {
 	name        string
 	description string
 	completed   bool
+	id          uuid.UUID
 }
 
 func NewTask(name string, description string, completed bool) *Task {
 	return &Task{
+		id:          uuid.New(),
 		name:        name,
 		description: description,
 		completed:   completed,
@@ -67,7 +73,7 @@ func NewTask(name string, description string, completed bool) *Task {
 }
 
 func (task *Task) String() string {
-	return fmt.Sprintf("Type Task ---\nTask Name: %s\nTask Description: %s\nTask Completed: %t\n", task.name, task.description, task.completed)
+	return fmt.Sprintf("Type Task ---\nTask ID:%s\nTask Name: %s\nTask Description: %s\nTask Completed: %t\n", task.id.String(), task.name, task.description, task.completed)
 }
 
 func (t *Task) MarkCompleted() {
@@ -91,6 +97,7 @@ func main() {
 
 	for i := 0; i < 3; i++ {
 		taskName := fmt.Sprintf("Task Number %d", i+1)
+
 		tempTask := NewTask(taskName, "Some random description to this task.", false)
 		l.AddTaskToList(tempTask)
 	}
