@@ -19,13 +19,37 @@ func (tl *TaskList) RemoveTaskFromIndex(index int) {
 
 }
 
-func (tl *TaskList) PrintAllTasks() (chain string) {
+func (tl *TaskList) PrintAllTasks() {
+	var chain string
 	chain += "-----------------\nTasks List \n------------------\n---------------\n"
 	for _, task := range tl.tasks {
 		chain += task.String()
 	}
 	fmt.Println(chain)
-	return
+}
+
+func (tl *TaskList) PrintCompletedTasks() {
+	var chain string
+	chain += "-----------------\nCompleted Tasks List \n------------------\n---------------\n"
+	for _, task := range tl.tasks {
+		if task.completed {
+			chain += task.String()
+		}
+	}
+
+	fmt.Println(chain)
+}
+
+func (tl *TaskList) PrintTasksWithOddIndex() {
+	var chain string
+	chain += "-----------------\nOdd Tasks List \n------------------\n---------------\n"
+	for index, task := range tl.tasks {
+		if (index+1)%2 == 0 {
+			continue
+		}
+		chain += task.String()
+	}
+	fmt.Println(chain)
 }
 
 type Task struct {
@@ -82,7 +106,9 @@ func main() {
 	fmt.Printf(t.String())
 
 	l.PrintAllTasks()
-	l.RemoveTaskFromIndex(len(l.tasks) - 1)
+	l.RemoveTaskFromIndex(len(l.tasks) - 2)
 	l.PrintAllTasks()
+	l.PrintTasksWithOddIndex()
+	l.PrintCompletedTasks()
 
 }
