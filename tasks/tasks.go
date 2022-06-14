@@ -118,4 +118,20 @@ func main() {
 	l.PrintTasksWithOddIndex()
 	l.PrintCompletedTasks()
 
+	tasksMap := make(map[string]*TaskList)
+
+	tlAbue := NewTaskList()
+
+	tlAbue.AddTaskToList(NewTask("Make my physical excercises", "Make my excersices now", false))
+	tlAbue.AddTaskToList(NewTask("Cook", "Need to cook some food", false))
+	tlAbue.AddTaskToList(NewTask("Read", "Need to read some books", false))
+
+	tasksMap["Alejandro"] = l
+	tasksMap["Abue"] = tlAbue
+
+	fmt.Println("Printing Abue Tasks")
+	tasksMap["Abue"].PrintAllTasks()
+	fmt.Println("Printing Alejandro Tasks")
+	tasksMap["Alejandro"].PrintAllTasks()
+
 }
