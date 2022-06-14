@@ -3,47 +3,40 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"sync"
 	"time"
 )
 
 func main() {
 
 	initialTime := time.Now()
-	var wg sync.WaitGroup
+	c := make(chan string)
+
 	servers := []string{
 		"https://platzi.com",
 		"https://google.com",
 		"https://facebook.com",
 		"https://instagram.com",
 	}
-	workersAmount := len(servers)
-	c := make(chan string, workersAmount)
 
 	for _, serverUrl := range servers {
-		wg.Add(1)
-		//testServer(serverUrl, c, &wg)
-		go testServer(serverUrl, c, &wg)
+		go testServer(serverUrl, c)
 	}
 
+	for i := 0; i < len(servers); i++ {
+		fmt.Println(<-c)
+	}
 	timePassed := time.Since(initialTime)
 	fmt.Printf("---------------------------\nExc. Time was %s\n", timePassed)
-	wg.Wait()
 
 }
 
-func testServer(serverURL string, c chan<- string, wg *sync.WaitGroup) {
-	defer wg.Done()
+func testServer(serverURL string, c chan<- string) {
 	_, err := http.Get(serverURL)
-	fmt.Printf("Testing Server %s\n---------\n", serverURL)
 
 	if err != nil {
-		fmt.Println("Server no available. 😭")
-		c <- ""
-
+		c <- serverURL + " ===  Server NOT working. ❌"
 	} else {
-		fmt.Println("Server working correctly. ✔️")
-		c <- "OK"
+		c <- serverURL + " ===  Server working. ✔️"
 	}
 
 }
