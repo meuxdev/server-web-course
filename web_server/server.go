@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 type Server struct {
 	port   string
@@ -17,6 +20,7 @@ func NewServer(port string) *Server {
 func (s *Server) Listen() error {
 	// param1 port | param2 handlers
 	http.Handle("/", s.router)
+	fmt.Printf("Server Running --- http://localhost%s", s.port)
 	err := http.ListenAndServe(s.port, nil)
 	if err != nil {
 		return err
