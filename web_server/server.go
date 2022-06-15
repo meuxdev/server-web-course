@@ -17,10 +17,14 @@ func NewServer(port string) *Server {
 	}
 }
 
+func (s *Server) Handle(path string, handler http.HandlerFunc) {
+	s.router.rules[path] = handler
+}
+
 func (s *Server) Listen() error {
 	// param1 port | param2 handlers
 	http.Handle("/", s.router)
-	fmt.Printf("Server Running --- http://localhost%s", s.port)
+	fmt.Printf("Server Running --- http://localhost%s\n", s.port)
 	err := http.ListenAndServe(s.port, nil)
 	if err != nil {
 		return err
