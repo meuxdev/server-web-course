@@ -18,13 +18,24 @@ func main() {
 		"https://instagram.com",
 	}
 
-	for _, serverUrl := range servers {
-		go testServer(serverUrl, c)
+	counter := 0
+	for {
+
+		if counter >= len(servers) {
+			break
+		}
+		for _, serverUrl := range servers {
+			go testServer(serverUrl, c)
+		}
+		time.Sleep(1 * time.Second)
+		fmt.Println(<-c)
+		counter++
+
 	}
 
-	for i := 0; i < len(servers); i++ {
-		fmt.Println(<-c)
-	}
+	//for i := 0; i < len(servers); i++ {
+	//fmt.Println(<-c)
+	//}
 	timePassed := time.Since(initialTime)
 	fmt.Printf("---------------------------\nExc. Time was %s\n", timePassed)
 
