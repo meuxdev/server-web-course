@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 func CheckAuth() Middleware {
@@ -15,6 +16,15 @@ func CheckAuth() Middleware {
 			} else {
 				return
 			}
+		}
+	}
+}
+
+func PrintRequest() Middleware {
+	return func(f http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, req *http.Request) {
+			fmt.Printf("New Request  Method --- %s --- %s\n", strings.ToUpper(req.Method), req.RequestURI)
+			f(w, req)
 		}
 	}
 }
