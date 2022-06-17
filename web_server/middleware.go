@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func CheckAuth() Middleware {
@@ -20,10 +22,28 @@ func CheckAuth() Middleware {
 	}
 }
 
-func PrintRequest() Middleware {
+func Logger() Middleware {
 	return func(f http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, req *http.Request) {
-			fmt.Printf("New Request  Method --- %s --- %s\n", strings.ToUpper(req.Method), req.RequestURI)
+			start := time.Now()
+			defer func() {
+				log.Printf("Request \n------   Method --- %s --- %s --- Time Passed %s\n",
+					strings.ToUpper(req.Method),
+					req.RequestURI,
+					time.Since(start))
+			}()
+			f(w, req)
+		}
+	}
+}
+
+func Logging() Middleware {
+	return func(f http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, req *http.Request) {
+			start := time.Now()
+			defer func() {
+				log.Println(req.URL.Path, time.Since(start))
+			}()
 			f(w, req)
 		}
 	}
