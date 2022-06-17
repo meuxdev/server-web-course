@@ -21,6 +21,10 @@ func (s *Server) Handle(path string, handler http.HandlerFunc) {
 	s.router.rules[path] = handler
 }
 
+func (s *Server) AddMiddleware(f http.HandlerFunc, midlewares ...Middleware) {
+
+}
+
 func (s *Server) Listen() error {
 	// param1 port | param2 handlers
 	http.Handle("/", s.router)
