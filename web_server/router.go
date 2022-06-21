@@ -5,25 +5,32 @@ import (
 )
 
 type Router struct {
-	rules map[string]http.HandlerFunc
+	rules map[string]map[string]http.HandlerFunc
 }
 
 func NewRouter() *Router {
 	return &Router{
-		rules: make(map[string]http.HandlerFunc),
+		rules: make(map[string]map[string]http.HandlerFunc),
 	}
 }
 
-func (r *Router) FindHandler(path string) (http.HandlerFunc, bool) {
-	handler, exists := r.rules[path]
-	return handler, exists
+func (r *Router) FindHandler(path string, method string) (http.HandlerFunc, bool, bool) {
+	_, pathExist := r.rules[path]
+	handler, methodExist := r.rules[path][method]
+	return handler, methodExist, pathExist
 }
 
 func (r *Router) ServeHTTP(w http.ResponseWriter, request *http.Request) {
-	handler, exists := r.FindHandler(request.URL.Path)
+	handler, methodExist, pathExist := r.FindHandler(request.URL.Path, request.Method)
 
-	if !exists {
+	if !pathExist {
 		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	if !methodExist {
+		// URL exists but not with that method
+		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
