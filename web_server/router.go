@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
@@ -30,6 +31,7 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 
 	if !methodExist {
 		// URL exists but not with that method
+		fmt.Println("Method not allowed")
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
