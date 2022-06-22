@@ -14,17 +14,17 @@ func HandleHome(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "This is the API endpoint")
 }
 
-func PostRequest(w http.ResponseWriter, req *http.Request) {
+func UserPostRequest(w http.ResponseWriter, req *http.Request) {
 	decoder := json.NewDecoder(req.Body)
-	var metadata MetaData
+	var userModel User
 	// send decoder as reference
-	err := decoder.Decode(&metadata)
+	err := decoder.Decode(&userModel)
 	if err != nil {
 		fmt.Fprintf(w, "error: %v", err)
 		return
 	}
 
-	// !Pending error -> fmt.Printf("Name: ", metadata["Name"])
+	fmt.Println("Name:", userModel.Name)
 	// %v so that the message is formated
-	fmt.Fprintf(w, "Payload: %v", metadata)
+	fmt.Fprintf(w, "Payload: %v", userModel)
 }
