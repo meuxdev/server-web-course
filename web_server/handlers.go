@@ -24,7 +24,14 @@ func UserPostRequest(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	response, err := userModel.ToJson()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	fmt.Println("Name:", userModel.Name)
 	// %v so that the message is formated
-	fmt.Fprintf(w, "Payload: %v", userModel)
+	// write is waiting for a slice of bytes, NOT STRING
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(response)
 }
